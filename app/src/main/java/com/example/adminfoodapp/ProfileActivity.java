@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -426,5 +429,34 @@ public class ProfileActivity extends BaseNetworkActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.menu_product) {
+            Intent intent = new Intent(this, ProductActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.menu_profile) {
+            return true;
+        } else if (id == R.id.menu_report) {
+            Intent intent = new Intent(this, ReportActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.menu_order) {
+            Intent intent = new Intent(this, OrderActivity.class);
+            startActivity(intent);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 }

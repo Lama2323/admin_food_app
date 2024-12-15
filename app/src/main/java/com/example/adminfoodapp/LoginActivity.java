@@ -110,7 +110,8 @@ public class LoginActivity extends BaseNetworkActivity {
                 String userRole = (String) response.getProperty("role");
                 if (userRole != null && userRole.equals("admin")) {
                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    // Chuyển hướng đến ProductActivity thay vì MainActivity
+                    startActivity(new Intent(LoginActivity.this, ProductActivity.class));
                     LoginActivity.this.finish();
                 } else {
                     // Reset button state

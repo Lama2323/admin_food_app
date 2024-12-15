@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_product"
+        android:title="Sản phẩm"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_profile"
+        android:title="Hồ sơ"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_report"
+        android:title="Báo cáo"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_order"
+        android:title="Đơn hàng"
+        app:showAsAction="never" />
+</menu>

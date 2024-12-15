@@ -5,35 +5,30 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.backendless.Backendless;
-import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.persistence.DataQueryBuilder;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.adminfoodapp.classes.Product;
 import com.example.adminfoodapp.utils.VietnameseUtils;
-import com.google.android.material.badge.BadgeDrawable;
-import com.google.android.material.badge.BadgeUtils;
-import com.google.android.material.badge.ExperimentalBadgeUtils;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class ProductActivity extends BaseAuthenticatedActivity {
+public class ProductActivity extends BaseNetworkActivity {
     private static final String TAG = "ProductActivity";
 
     // Views
@@ -41,105 +36,32 @@ public class ProductActivity extends BaseAuthenticatedActivity {
     private ProductAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private EditText searchEditText;
-    private TextView userNameTextView;
-    private ImageView profileIcon;
     private Button addProductButton;
 
     // Data
     private final List<Product> productList = new ArrayList<>();
     private final List<Product> allProductsList = new ArrayList<>();
     private boolean isInitialized = false;
-    private static final RequestOptions profileImageOptions = new RequestOptions()
-            .placeholder(R.drawable.ic_profile)
-            .error(R.drawable.ic_profile)
-            .centerCrop()
-            .dontAnimate();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
-    }
 
-    @ExperimentalBadgeUtils
-    @Override
-    protected void onAuthenticated() {
-        try {
-            if (!isInitialized) {
-                initializeViews();
-                setupUserInfo();
-                setupRecyclerView();
-                setupSwipeRefresh();
-                setupSearch();
-                setupClickListeners();
-                isInitialized = true;
-            }
-            loadProducts();
-        } catch (Exception e) {
-            Log.e(TAG, "Error in onAuthenticated: " + e.getMessage(), e);
-            Toast.makeText(this, "Error initializing product view", Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        initializeViews();
+        setupRecyclerView();
+        setupSwipeRefresh();
+        setupSearch();
+        setupClickListeners();
+        loadProducts();
+        isInitialized = true; // Thêm dòng này để kích hoạt filterProducts
     }
 
     private void initializeViews() {
         recyclerView = findViewById(R.id.recyclerView);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         searchEditText = findViewById(R.id.searchEditText);
-        userNameTextView = findViewById(R.id.userNameTextView);
-        profileIcon = findViewById(R.id.profileIcon);
         addProductButton = findViewById(R.id.add_product_button);
-    }
-
-    private void setupUserInfo() {
-        String userId = Backendless.UserService.loggedInUser();
-
-        Backendless.UserService.findById(userId, new AsyncCallback<BackendlessUser>() {
-            @Override
-            public void handleResponse(BackendlessUser user) {
-                if (!isFinishing() && !isDestroyed()) {
-                    runOnUiThread(() -> {
-                        String userName = user.getProperty("name") != null ?
-                                (String) user.getProperty("name") : "Admin";
-                        userNameTextView.setText(userName);
-
-                        String imageUrl = user.getProperty("image_source") != null ?
-                                (String) user.getProperty("image_source") : "";
-                        if (!imageUrl.isEmpty()) {
-                            preloadProfileImage(imageUrl);
-
-                            Glide.with(ProductActivity.this)
-                                    .load(imageUrl)
-                                    .apply(profileImageOptions)
-                                    .into(profileIcon);
-                        } else {
-                            profileIcon.setImageResource(R.drawable.ic_profile);
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                if (!isFinishing() && !isDestroyed()) {
-                    Log.e(TAG, "Error fetching user info: " + fault.getMessage());
-                    runOnUiThread(() ->
-                            Toast.makeText(ProductActivity.this,
-                                    "Error loading user info",
-                                    Toast.LENGTH_SHORT).show()
-                    );
-                }
-            }
-        });
-    }
-
-    private void preloadProfileImage(String imageUrl) {
-        if (imageUrl != null && !imageUrl.isEmpty()) {
-            Glide.with(this)
-                    .load(imageUrl)
-                    .apply(profileImageOptions)
-                    .preload();
-        }
     }
 
     private void setupRecyclerView() {
@@ -150,13 +72,13 @@ public class ProductActivity extends BaseAuthenticatedActivity {
     }
 
     private void setupSwipeRefresh() {
-        swipeRefreshLayout.setColorSchemeResources( // setup màu sắc của swipe refresh indicator
+        swipeRefreshLayout.setColorSchemeResources(
                 android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light
         );
-        swipeRefreshLayout.setOnRefreshListener(this::loadProducts);  //setup func sẽ thực thi khi swipe, ở đây là func loadProducts
+        swipeRefreshLayout.setOnRefreshListener(this::loadProducts);
     }
 
     private void setupSearch() {
@@ -175,12 +97,6 @@ public class ProductActivity extends BaseAuthenticatedActivity {
     }
 
     private void setupClickListeners() {
-        profileIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ProfileActivity.class);
-            startActivity(intent);
-        });
-
-        // Thêm sự kiện onClick cho nút "Thêm món"
         addProductButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, UpdateProductActivity.class);
             startActivity(intent);
@@ -281,23 +197,31 @@ public class ProductActivity extends BaseAuthenticatedActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (isInitialized) {
-            if (getIntent().getBooleanExtra("USER_UPDATED", false)) {
-                setupUserInfo();
-                // Xóa flag để tránh load lại khi activity resume lần sau
-                getIntent().removeExtra("USER_UPDATED");
-            }
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.menu_product) {
+            return true;
+        } else if (id == R.id.menu_profile) {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.menu_report) {
+            Intent intent = new Intent(this, ReportActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.menu_order) {
+            Intent intent = new Intent(this, OrderActivity.class);
+            startActivity(intent);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 
     @Override
-    protected void handleAuthenticationError(Exception e) {
-        super.handleAuthenticationError(e);
-        showError("Authentication error occurred");
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
     }
-
-    @Override
-    public void onBackPressed() {}
 }

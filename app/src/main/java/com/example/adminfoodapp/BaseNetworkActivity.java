@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.adminfoodapp.utils.NetworkChangeReceiver;
 import com.example.foodorderingapp.utils.NetworkUtils;
 
-public abstract class BaseNetworkActivity extends AppCompatActivity {
+public abstract class BaseNetworkActivity extends AppCompatActivity  {
     private NetworkChangeReceiver networkChangeReceiver;
 
     @Override
