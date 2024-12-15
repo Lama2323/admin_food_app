@@ -98,7 +98,7 @@ public class ProductActivity extends BaseNetworkActivity {
 
     private void setupClickListeners() {
         addProductButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, UpdateProductActivity.class);
+            Intent intent = new Intent(this, AddProductActivity.class);
             startActivity(intent);
         });
     }
