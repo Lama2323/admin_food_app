@@ -17,31 +17,46 @@
         android:theme="@style/Theme.AdminFoodApp"
         tools:targetApi="31">
         <activity
+            android:name=".OrderDetailActivity"
+            android:label="Chi tiết đơn hàng"
+            android:exported="false" />
+        <activity
+            android:name=".OrderAdapter"
+            android:exported="false" />
+        <activity
             android:name=".AddProductActivity"
+            android:label="Thêm sản phẩm"
             android:exported="false" />
         <activity
             android:name=".OrderActivity"
+            android:label="Danh sách đơn hàng"
             android:exported="false" />
         <activity
             android:name=".ReportActivity"
+            android:label="Báo cáo"
             android:exported="false" />
         <activity
             android:name=".UpdateProductActivity"
+            android:label="Cập nhật sản phẩm"
             android:exported="false" />
         <activity
             android:name=".ChangePasswordActivity"
+            android:label="Đổi mật khẩu"
             android:exported="false" />
         <activity
             android:name=".ProfileActivity"
+            android:label="Hồ sơ"
             android:exported="false" />
         <activity
             android:name=".ProductAdapter"
             android:exported="false" />
         <activity
             android:name=".ProductActivity"
+            android:label="Danh sách sản phẩm"
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"
+            android:label="Đăng ký"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -54,9 +69,11 @@
         </activity>
         <activity
             android:name=".LoginActivity"
+            android:label="Đăng nhập"
             android:exported="false" />
         <activity
             android:name=".DisconnectedActivity"
+            android:label="Mất kết nôi"
             android:exported="false" />
     </application>
 
