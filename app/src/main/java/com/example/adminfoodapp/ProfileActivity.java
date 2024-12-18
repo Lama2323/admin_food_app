@@ -127,7 +127,7 @@ public class ProfileActivity extends BaseNetworkActivity {
         String name = (String) user.getProperty("name");
         String image = (String) user.getProperty("image_source");
 
-        usernameTextView.setText(name != null ? name : "No Name");
+        usernameTextView.setText(name != null ? name : "Admin");
 
         if (image != null && !image.isEmpty()) {
             loadProfileImage(image);

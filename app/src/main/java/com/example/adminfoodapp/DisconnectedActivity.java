@@ -2,15 +2,8 @@ package com.example.adminfoodapp;
 
 import android.os.Bundle;
 import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import com.example.adminfoodapp.R;
-import com.example.foodorderingapp.utils.NetworkUtils;
+import com.example.adminfoodapp.utils.NetworkUtils;
 
 public class DisconnectedActivity extends AppCompatActivity {
     @Override

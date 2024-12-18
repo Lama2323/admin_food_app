@@ -1,4 +1,4 @@
-package com.example.foodorderingapp.utils;
+package com.example.adminfoodapp.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;

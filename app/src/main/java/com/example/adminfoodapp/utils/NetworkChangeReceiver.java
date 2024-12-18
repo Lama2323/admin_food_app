@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.widget.Toast;
-import com.example.foodorderingapp.utils.NetworkUtils;
+import com.example.adminfoodapp.utils.NetworkUtils;
 
 import com.example.adminfoodapp.DisconnectedActivity;
 
